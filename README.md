@@ -1,8 +1,9 @@
-# opencode-github-starter
+# todo-app
 
-A hardened starter for running the [opencode](https://opencode.ai/docs/github/) GitHub agent —
-from zero to an agent that writes code, pushes branches, and opens PRs by itself.
-Built by debugging every failure for real; the scars are documented below.
+Tiny static todo web app (HTML/CSS/JS, `localStorage`, no backend, no build step) —
+first real project generated from
+[`opencode-github-starter`](https://github.com/e2edev-frame/opencode-github-starter).
+Deployed on Vercel; every PR gets a Preview URL.
 
 ## How it works — 3 contributors
 
@@ -19,7 +20,7 @@ Built by debugging every failure for real; the scars are documented below.
 | `opencode.yml` | `/opencode` or `/oc` comment, **OWNER only** | Implement + push branch + open PR |
 | `opencode-review.yml` | PR opened/updated | Auto-review every PR |
 | `direct-push-watchdog.yml` | Push to `main` | Opens an issue if anyone bypasses PRs |
-| `ci.yml` | PR / push | `pytest` must stay green |
+| `ci.yml` | PR / push | `node --check` + required files must pass |
 
 Rules live in [`AGENTS.md`](AGENTS.md), the contribution flow in
 [`.opencode/skills/pr-flow/SKILL.md`](.opencode/skills/pr-flow/SKILL.md),
@@ -58,7 +59,8 @@ Details, dead ends, and fixes: [`docs/GITHUB-SETUP.md`](docs/GITHUB-SETUP.md).
 ## Repo layout
 
 ```
-calc.py / test_calc.py   demo code (the agent wrote subtract/divide itself)
+index.html / styles.css / app.js   the app (open index.html locally to try)
+vercel.json                        static deploy config (cleanUrls)
 AGENTS.md                rules incl. cloud-agent discipline
 docs/GITHUB-SETUP.md     setup guide + troubleshooting from real incidents
 .github/workflows/      the 4 workflows above

@@ -3,4 +3,8 @@
 *.yml text eol=lf
 *.yaml text eol=lf
 *.md text eol=lf
+*.js text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
 LICENSE text eol=lf

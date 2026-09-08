@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>todo-app — tiny todo, deployed from a template</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <h1>todo-app</h1>
+    <p class="sub">Static demo built from <code>opencode-github-starter</code>. Tasks persist in your browser.</p>
+    <form id="add-form" autocomplete="off">
+      <input id="new-task" type="text" placeholder="What needs doing?" maxlength="200" aria-label="New task">
+      <button type="submit">Add</button>
+    </form>
+    <div class="filters" role="group" aria-label="Filter tasks">
+      <button data-filter="all" class="active">All</button>
+      <button data-filter="active">Active</button>
+      <button data-filter="completed">Completed</button>
+    </div>
+    <ul id="list"></ul>
+    <footer>
+      <span id="count"></span>
+      <button id="clear-completed">Clear completed</button>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

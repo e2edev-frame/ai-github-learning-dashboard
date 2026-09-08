@@ -1,6 +1,7 @@
-# AGENTS.md — opencode-github-starter
+# AGENTS.md — todo-app
 
-Test repo for the OpenCode GitHub agent. Small Python demo (`calc.py` + `test_calc.py`).
+Static todo web app (`index.html` + `styles.css` + `app.js`, no backend, no build).
+Built from the `opencode-github-starter` template; agent pipeline inherited.
 
 ## Golden rules
 
@@ -14,8 +15,8 @@ Test repo for the OpenCode GitHub agent. Small Python demo (`calc.py` + `test_ca
 
 ## Workflow commands
 
-- Sanity check demo: `python calc.py` (expect `5`), `python -m pytest` if tests exist.
-- GitHub: `gh pr create`, `gh pr view`, `gh issue create`, `gh run list --repo e2edev-frame/opencode-github-starter`.
+- Sanity check: `node --check app.js`, open `index.html` in a browser.
+- GitHub: `gh pr create`, `gh pr view`, `gh issue create`, `gh run list --repo e2edev-frame/todo-app`.
 
 ## Docs
 
@@ -44,7 +45,7 @@ only catches identical repeated calls, NOT one hanging call, so discipline is on
    That is the documented minimum for an agent expected to push branches and open PRs
    (see upstream "schedule" guidance). Do not widen (no `actions:write`, no `admin`).
 4. **Every CLI command must be fully non-interactive.** Always pass explicit
-   `--repo e2edev-frame/opencode-github-starter --head <branch> --base main`
+   `--repo e2edev-frame/todo-app --head <branch> --base main`
    (`--title/--body` for `gh pr create`), and always close stdin with `< /dev/null`
    so a forgotten prompt fails fast instead of hanging. Prefer `gh ... --jq` output
    over parsing human text.

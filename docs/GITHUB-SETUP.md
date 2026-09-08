@@ -1,4 +1,4 @@
-# GitHub + OpenCode setup — opencode-github-starter
+# GitHub + OpenCode setup — todo-app
 
 > Start with the [README](../README.md) for the big picture; this file is the deep log.
 
@@ -25,7 +25,7 @@ together when upgrading OpenCode.
 ## Everyday use
 
 - Issue/PR comment: `/opencode fix this`, `/opencode explain this issue`, `/oc add error handling here`
-- Local: `gh issue create`, `gh pr create`, `gh run list --repo e2edev-frame/opencode-github-starter`
+- Local: `gh issue create`, `gh pr create`, `gh run list --repo e2edev-frame/todo-app`
 
 ## Command vocabulary (Issue/PR-first)
 
