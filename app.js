@@ -27,6 +27,17 @@ function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
+function safeGithubUrl(value) {
+  const url = String(value || "").trim().slice(0, 500);
+  if (!url) return "";
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:" ? url : "";
+  } catch {
+    return "";
+  }
+}
+
 function normalize(item) {
   return {
     id: item.id || uid(),
@@ -34,8 +45,17 @@ function normalize(item) {
     category: String(item.category || "General").trim().slice(0, 80),
     status: STATUS_LABELS[item.status] ? item.status : "not-started",
     notes: String(item.notes || "").trim().slice(0, 1000),
-    githubUrl: String(item.githubUrl || "").trim().slice(0, 500),
+    githubUrl: safeGithubUrl(item.githubUrl),
   };
+}
+
+function uniqueIds(items) {
+  const ids = new Set();
+  return items.map((item) => {
+    if (ids.has(item.id)) item.id = uid();
+    ids.add(item.id);
+    return item;
+  });
 }
 
 function load() {
@@ -43,17 +63,21 @@ function load() {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed.map(normalize).filter((item) => item.title) : [];
+      if (!Array.isArray(parsed)) return [];
+      const items = uniqueIds(parsed.map(normalize).filter((item) => item.title));
+      save(items);
+      return items;
     }
     const legacy = JSON.parse(localStorage.getItem(LEGACY_KEY) || "[]");
     if (!Array.isArray(legacy)) return [];
-    const migrated = legacy.map((task) => normalize({
+    const migrated = uniqueIds(legacy.map((task) => normalize({
       id: task.id,
       title: task.text,
       category: "General",
       status: task.done ? "completed" : "not-started",
-    })).filter((item) => item.title);
-    if (migrated.length) save(migrated);
+    })).filter((item) => item.title));
+    save(migrated);
+    localStorage.removeItem(LEGACY_KEY);
     return migrated;
   } catch {
     return [];
