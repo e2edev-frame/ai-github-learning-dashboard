@@ -1,72 +1,115 @@
 # todo-app
 
-Tiny static todo web app (HTML/CSS/JS, `localStorage`, no backend, no build step) —
-first real project generated from
-[`opencode-github-starter`](https://github.com/e2edev-frame/opencode-github-starter).
-Deployed on Vercel; every PR gets a Preview URL.
+ตัวอย่างโปรเจกต์ขนาดเล็กสำหรับทดลองการทำงานร่วมกันระหว่าง **คน, AI และ GitHub**
 
-## How it works — 3 contributors
+ตัวแอปเป็น Todo แบบง่าย ใช้ HTML, CSS และ JavaScript เก็บข้อมูลไว้ใน `localStorage`
+ไม่มี backend และไม่มีขั้นตอน build จึงเปิด `index.html` เพื่อทดลองได้ทันที
 
-| Who | Role |
-|---|---|
-| **Owner** (you) | Gives orders, approves, merges. The only human. |
-| **Local agent** | Works on your machine, commits signed, opens PRs via `gh`. |
-| **Cloud agent** (`opencode-agent[bot]`) | Lives in GitHub Actions. Comment `/opencode <task>` on any issue/PR and it implements, pushes, and opens a PR. |
+## Repo นี้มีไว้ทำอะไร
 
-## Automation (4 workflows)
+ประโยชน์หลักของ repo นี้ไม่ใช่ความซับซ้อนของแอป Todo แต่คือการสาธิต workflow
+สำหรับพัฒนาโปรแกรมด้วย AI อย่างปลอดภัยและตรวจสอบย้อนหลังได้:
 
-| Workflow | Trigger | Job |
-|---|---|---|
-| `opencode.yml` | `/opencode` or `/oc` comment, **OWNER only** | Implement + push branch + open PR |
-| `opencode-review.yml` | PR opened/updated | Auto-review every PR |
-| `direct-push-watchdog.yml` | Push to `main` | Opens an issue if anyone bypasses PRs |
-| `ci.yml` | PR / push | `node --check` + required files must pass |
+- คนเปิด PR แล้วให้ AI ตรวจโค้ดอัตโนมัติ
+- AI เปิด PR แล้วคนตรวจและสั่งให้ AI แก้ไขผ่านคอมเมนต์
+- ทุกการเปลี่ยนแปลงอยู่ใน PR, review และ GitHub Actions
+- CI ตรวจโค้ดก่อน merge
+- Branch protection ป้องกันการเปลี่ยนแปลงที่ไม่ผ่านการตรวจ
+- Watchdog แจ้งเตือนหากมี commit ไปถึง `main` โดยไม่ผ่าน PR
 
-Rules live in [`AGENTS.md`](AGENTS.md), the contribution flow in
-[`.opencode/skills/pr-flow/SKILL.md`](.opencode/skills/pr-flow/SKILL.md),
-and the full setup/troubleshooting log in [`docs/GITHUB-SETUP.md`](docs/GITHUB-SETUP.md).
+จึงใช้ repo นี้เป็น **ห้องทดลอง** หรือ **ต้นแบบสำหรับนำ workflow ไปใช้กับ repo อื่น**
+ได้ง่าย ไม่ใช่ Todo app สำหรับใช้งานจริงในระดับ production
 
-## Quickstart (reuse this in your own repo, ~20 min)
+## วิธีทำงานแบบสั้น ๆ
 
-1. Install the [opencode-agent app](https://github.com/apps/opencode-agent) on your repository.
-2. Add the `OPENCODE_API_KEY` Actions secret (your own Zen key).
-3. Repo **Settings → Actions → General → Workflow permissions** → check
-   **"Allow GitHub Actions to create and approve pull requests"** → Save.
-   (No API for this — it must be clicked. Without it the agent gets
-   `403: GitHub Actions is not permitted to create pull requests`.)
-4. Protect `main`: require a PR + 1 approval, forbid force-push/deletion.
-5. Open an issue, comment `/opencode <task>`, watch the agent open a PR.
-
-If your repo is private, also check your Actions minutes quota (public repos are unlimited).
-Solo devs: widen the trigger to `MEMBER`/`COLLABORATOR` only when the team grows;
-you cannot approve your own PRs, so merge your own with `gh pr merge --admin`.
-
-## Lessons learned the hard way
-
-1. **Read-only token can't deliver.** The agent implemented code but couldn't push —
-   the job needs `contents: write` + `pull-requests: write` + `issues: write`.
-2. **Public repo + open trigger = free compute for strangers.** Lock the trigger to
-   `OWNER` (`author_association`), and match precisely with `' /oc'`/`startsWith`
-   instead of substring `contains` (which also matches words like `/october`).
-3. **No keyboard on the runner.** A `gh pr create` missing `--head` waited on an
-   interactive prompt for **19 minutes**. Every CLI command must be fully explicit
-   with stdin closed (`< /dev/null`) so a forgotten prompt fails fast.
-4. **Pin your actions.** `@latest`/floating tags are a supply-chain risk —
-   pin to SHAs (see `opencode.yml`).
-
-Details, dead ends, and fixes: [`docs/GITHUB-SETUP.md`](docs/GITHUB-SETUP.md).
-
-## Repo layout
-
+```text
+คนเปิด Issue หรือ PR
+        |
+        v
+สั่ง AI ผ่านคอมเมนต์ /opencode หรือ /oc
+        |
+        v
+AI แก้โค้ดและเปิด/อัปเดต PR
+        |
+        v
+CI + AI review ตรวจสอบ
+        |
+        v
+คนตรวจ อนุมัติ และ merge
 ```
-index.html / styles.css / app.js   the app (open index.html locally to try)
-vercel.json                        static deploy config (cleanUrls)
-AGENTS.md                rules incl. cloud-agent discipline
-docs/GITHUB-SETUP.md     setup guide + troubleshooting from real incidents
-.github/workflows/      the 4 workflows above
-.opencode/skills/        pr-flow skill: branch → PR → review → squash-merge
+
+## ผู้มีส่วนร่วม
+
+| ผู้มีส่วนร่วม | หน้าที่ |
+|---|---|
+| เจ้าของ repo | สั่งงาน ตรวจ review อนุมัติ และ merge |
+| Local agent | ช่วยแก้โค้ดจากเครื่องของเรา |
+| Cloud agent | รับคำสั่งจากคอมเมนต์ `/opencode` หรือ `/oc` ใน GitHub |
+
+## GitHub Actions
+
+| Workflow | หน้าที่ |
+|---|---|
+| `opencode.yml` | รับคำสั่งจากเจ้าของ repo ผ่านคอมเมนต์ แล้วแก้โค้ดหรือเปิด PR |
+| `opencode-review.yml` | ตรวจ PR อัตโนมัติด้วย OpenCode |
+| `direct-push-watchdog.yml` | แจ้งเตือนเมื่อมี commit ไป `main` โดยไม่ผ่าน PR |
+| `ci.yml` | ตรวจ JavaScript และไฟล์สำคัญของโปรเจกต์ |
+
+PR ที่เปิดโดย Dependabot จะข้าม automatic OpenCode review เพราะ Dependabot
+ไม่มีสิทธิ์เขียนคอมเมนต์ แต่เจ้าของ repo ยังสั่ง `/opencode ...` ใน PR เหล่านั้นได้
+
+## ทดลองใช้งานแอป
+
+1. เปิดไฟล์ `index.html` ในเบราว์เซอร์
+2. เพิ่มรายการ Todo
+3. ดับเบิลคลิกข้อความเพื่อแก้ไข
+4. ใช้ปุ่มกรองรายการ หรือกดล้างรายการที่เสร็จแล้ว
+
+ข้อมูลจะถูกเก็บไว้ในเบราว์เซอร์เครื่องนั้นเท่านั้น ไม่มีฐานข้อมูลกลาง
+
+## ทดลอง workflow ของ AI
+
+1. เปิด Issue หรือ PR
+2. เขียนคอมเมนต์ เช่น:
+
+   ```text
+   /opencode อธิบายการทำงานของไฟล์นี้
+   ```
+
+   หรือ:
+
+   ```text
+   /oc แก้บั๊กนี้และเพิ่มการตรวจสอบที่จำเป็น
+   ```
+
+3. ตรวจ branch, PR, review และผล CI
+4. แก้ไขตาม review แล้ว merge เมื่อทุกอย่างเรียบร้อย
+
+คำสั่งของ AI จำกัดไว้เฉพาะเจ้าของ repo เพื่อป้องกันผู้อื่นนำ Actions และ API key
+ไปใช้งานโดยไม่ได้รับอนุญาต
+
+## ถ้าจะนำไปใช้กับ repo อื่น
+
+ต้องติดตั้ง OpenCode GitHub App, เพิ่ม secret `OPENCODE_API_KEY`, ตั้งค่า branch
+protection และตรวจสอบ workflow ให้เหมาะกับสิทธิ์ของ repo ก่อนใช้งานจริง
+
+กฎและรายละเอียดเชิงลึกอยู่ใน:
+
+- [`AGENTS.md`](AGENTS.md) - กฎการทำงานของ repo
+- [`.opencode/skills/pr-flow/SKILL.md`](.opencode/skills/pr-flow/SKILL.md) - ขั้นตอนการทำงานแบบ PR
+- [`docs/GITHUB-SETUP.md`](docs/GITHUB-SETUP.md) - คู่มือตั้งค่าและบทเรียนจากการใช้งานจริง
+
+## โครงสร้างไฟล์หลัก
+
+```text
+index.html / styles.css / app.js   ตัวแอป Todo
+vercel.json                        การตั้งค่า deploy แบบ static
+.github/workflows/                 workflow ของ GitHub Actions
+.opencode/skills/                  กฎการทำงานของ AI
+AGENTS.md                          กฎความปลอดภัยและการพัฒนา
+docs/GITHUB-SETUP.md                คู่มือตั้งค่า GitHub และ OpenCode
 ```
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - ดูรายละเอียดใน [`LICENSE`](LICENSE)
