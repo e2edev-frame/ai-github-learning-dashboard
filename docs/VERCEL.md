@@ -1,12 +1,11 @@
-# Vercel + GitHub — opencode-github-starter
+# Vercel + GitHub — todo-app
 
-> This repo is a Python demo, so Vercel does not deploy it. This doc is the
-> runbook for wiring Vercel into this repo's GitHub flow (and your real projects).
+> Static site (`index.html` + `styles.css` + `app.js`), Framework Preset **Other**.
 > Local Vercel CLI here is logged in as `dev-2693`.
 
 ## 1. Connect the repo (one time, on vercel.com)
 
-1. Vercel dashboard → **Add New → Project → Import** `e2edev-frame/opencode-github-starter`.
+1. Vercel dashboard → **Add New → Project → Import** `e2edev-frame/todo-app`.
 2. Set Framework Preset (e.g. Next.js for your real project), add **Environment Variables**.
 3. Deploy. Every future PR then gets an automatic **Preview Deployment** with its own URL,
    and Vercel posts the link on the PR.
