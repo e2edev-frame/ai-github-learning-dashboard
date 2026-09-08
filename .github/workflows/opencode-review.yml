@@ -7,7 +7,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   review:
-    if: github.actor != 'opencode-agent[bot]'
+    if: |
+      github.actor != 'opencode-agent[bot]' &&
+      github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
