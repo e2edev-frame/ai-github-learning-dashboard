@@ -29,6 +29,10 @@ jobs:
           use_github_token: true
           prompt: |
             Review this pull request:
+            Communicate the review findings and summary in clear, concise Thai.
+            Use Thai for the pull request title and description when creating or
+            updating them. Keep code identifiers, file names, commands, branch
+            names, and standard technical terms unchanged.
             - Check for code quality issues
             - Look for potential bugs
             - Flag committed build artifacts (__pycache__, node_modules, dist) or secrets

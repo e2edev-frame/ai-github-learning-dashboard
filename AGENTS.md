@@ -56,3 +56,12 @@ only catches identical repeated calls, NOT one hanging call, so discipline is on
    no SSH key) — never enable required-signed-commits while the agent writes code.
    Runs bill Zen credits — a `CreditsError: No payment method` in logs means fix
    billing at opencode.ai, not the workflow.
+
+## Communication language
+
+- Use clear, concise Thai for Issue and PR comments, PR titles and descriptions,
+  review findings, summaries, and test reports.
+- Keep source code, identifiers, file names, commands, branch names, commit
+  prefixes (`feat:`, `fix:`, `docs:`), API names, and error codes in English.
+- Use English technical terms when translating them would make the meaning less
+  clear.

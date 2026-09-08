@@ -27,6 +27,11 @@ together when upgrading OpenCode.
 - Issue/PR comment: `/opencode fix this`, `/opencode explain this issue`, `/oc add error handling here`
 - Local: `gh issue create`, `gh pr create`, `gh run list --repo e2edev-frame/todo-app`
 
+OpenCode communicates in Thai for Issue and PR conversations, PR titles and
+descriptions, review findings, summaries, and test reports. Source code,
+identifiers, file names, commands, branch names, commit prefixes, API names,
+and error codes remain in English.
+
 ## Command vocabulary (Issue/PR-first)
 
 Every order goes on an Issue or PR comment so the history stays auditable.
