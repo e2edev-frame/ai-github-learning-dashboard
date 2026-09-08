@@ -231,9 +231,8 @@ formEl.addEventListener("submit", (event) => {
 });
 
 cancelEditEl.addEventListener("click", resetForm);
-for (const control of [searchEl, statusFilterEl, categoryFilterEl]) {
-  control.addEventListener("input", render);
-  control.addEventListener("change", render);
-}
+searchEl.addEventListener("input", render);
+statusFilterEl.addEventListener("change", render);
+categoryFilterEl.addEventListener("change", render);
 
 render();
