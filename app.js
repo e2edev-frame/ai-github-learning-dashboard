@@ -36,6 +36,19 @@ function visible(tasks) {
   return tasks;
 }
 
+function editTask(id, editInput) {
+  const tasks = load();
+  const current = tasks.find((t) => t.id === id);
+  if (!current) return;
+
+  const clean = editInput.value.trim().slice(0, 200);
+  if (clean) {
+    current.text = clean;
+    save(tasks);
+  }
+  render();
+}
+
 function render() {
   const tasks = load();
   listEl.innerHTML = "";
@@ -51,6 +64,25 @@ function render() {
 
     const span = document.createElement("span");
     span.textContent = task.text;
+    span.addEventListener("dblclick", () => {
+      const editInput = document.createElement("input");
+      editInput.type = "text";
+      editInput.value = task.text;
+      editInput.maxLength = 200;
+      editInput.className = "edit-task";
+      editInput.setAttribute("aria-label", "Edit task");
+      editInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          editTask(task.id, editInput);
+        } else if (e.key === "Escape") {
+          render();
+        }
+      });
+      span.replaceWith(editInput);
+      editInput.focus();
+      editInput.select();
+    });
 
     const del = document.createElement("button");
     del.textContent = "Delete";

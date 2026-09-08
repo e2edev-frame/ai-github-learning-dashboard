@@ -21,5 +21,6 @@ button { cursor: pointer; padding: 0.5rem 0.75rem; font-size: 0.9rem; }
 }
 #list li.done span { text-decoration: line-through; opacity: 0.6; }
 #list li span { flex: 1; overflow-wrap: anywhere; }
+#list li .edit-task { flex: 1; min-width: 0; padding: 0.25rem; font: inherit; }
 #list .del { margin-left: auto; }
 footer { display: flex; justify-content: space-between; align-items: center; }
